@@ -21,13 +21,19 @@ def model_train(inputs, blocks, args, sum_path='./output/tensorboard'):
     x = tf.placeholder(tf.float32, [None, n_his + 1, n, 1], name='data_input')
     traffic_data_tf = tf.placeholder(tf.float32, [None, n, 3], name='Gat_data_input')
     keep_prob = tf.placeholder(tf.float32, name='keep_prob')
+    
+    #####################################################################################
+    ############################### Get Rich or Die Tryin' ##############################
+    #####################################################################################
+    # 发论文so easy！
     #get Gat
     #dis_data = creat_distance.norm_dis(dis_path)
     W_ma = get_weighted_adj_matrix(traffic_data_tf,n)
     Lk = first_approx(W_ma,n)
     #Lk = cheb_poly_approx(L,Ks,n)
     tf.add_to_collection(name='graph_kernel', value=tf.cast(Lk, tf.float32))
-
+    ####
+    #####################################################################################
     # Define model loss
     train_loss, pred = build_model(x, n_his, Ks, Kt, blocks, keep_prob)
     tf.summary.scalar('train_loss', train_loss)
